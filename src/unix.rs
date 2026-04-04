@@ -100,5 +100,12 @@ extern "C" {
     )]
     #[cfg_attr(target_os = "aix", link_name = "_Errno")]
     #[cfg_attr(target_os = "nto", link_name = "__get_errno_ptr")]
+
+    // Newer libc versions re-export `c_int` from `std` which is incompatible
+    // with Rust < 1.65. However, this is not actually a problem as users can
+    // use an older `libc`.
+    // See: https://github.com/rust-lang/libc/pull/5015
+    #[allow(clippy::incompatible_msrv)]
+
     fn errno_location() -> *mut c_int;
 }
